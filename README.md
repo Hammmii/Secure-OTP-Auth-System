@@ -43,8 +43,8 @@ Secure-OTP-Auth-System/
 ├── static/                # CSS or frontend assets
 ├── users.db               # SQLite database
 ├── requirements.txt       # Python dependencies
-├── .gitignore
-└── README.md 
+├── .gitignore             # Git ignore file
+└── README.md              # Project documentation
 
 ---
 
