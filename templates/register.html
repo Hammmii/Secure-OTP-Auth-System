@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: #333;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 80px;
+            max-width: 400px;
+        }
+        .form-container {
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+        .form-container:hover {
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #495057;
+            font-weight: 700;
+        }
+        label {
+            font-weight: 600;
+            color: #333;
+        }
+        .btn-primary {
+            width: 100%;
+            background-color: #6a11cb;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #5b0ea7;
+        }
+        .btn-secondary {
+            width: 100%;
+            margin-top: 10px;
+            background-color: #6c757d;
+            border: none;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        .feedback {
+            font-size: 0.9em;
+            color: #dc3545;
+        }
+        .feedback.available {
+            color: #28a745;
+        }
+        .form-control {
+            border-radius: 5px;
+            box-shadow: none;
+            transition: border-color 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #6a11cb;
+            box-shadow: 0 0 5px rgba(106, 17, 203, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="form-container">
+            <h2>Register</h2>
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="mb-3">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <!-- Registration Form -->
+            <form method="POST" action="{{ url_for('register') }}">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                    <div id="email-feedback" class="feedback"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                    <div id="username-feedback" class="feedback"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <div class="mb-3">
+                    <label for="confirm-password" class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control" id="confirm-password" name="confirm-password" required>
+                    <div id="password-feedback" class="feedback"></div>
+                </div>
+                <button type="submit" class="btn btn-primary">Register</button>
+                <a href="{{ url_for('main') }}" class="btn btn-secondary mt-2">Go Back</a>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JavaScript for Real-Time Availability Check and Password Match Validation -->
+    <script>
+        function checkAvailability(field, value, feedbackElementId) {
+            const feedback = document.getElementById(feedbackElementId);
+
+            if (value.length > 0) {
+                fetch('/check_availability', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({ 'field': field, 'value': value })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.exists) {
+                        feedback.textContent = `${field.charAt(0).toUpperCase() + field.slice(1)} already taken.`;
+                        feedback.classList.add('text-danger');
+                        feedback.classList.remove('available');
+                    } else {
+                        feedback.textContent = `${field.charAt(0).toUpperCase() + field.slice(1)} is available.`;
+                        feedback.classList.add('text-success');
+                        feedback.classList.add('available');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            } else {
+                feedback.textContent = '';
+            }
+        }
+
+        // Check if passwords match
+        document.getElementById('confirm-password').addEventListener('input', function() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = this.value;
+            const feedback = document.getElementById('password-feedback');
+
+            if (confirmPassword !== password) {
+                feedback.textContent = 'Passwords do not match.';
+                feedback.classList.add('text-danger');
+            } else {
+                feedback.textContent = 'Passwords match.';
+                feedback.classList.remove('text-danger');
+                feedback.classList.add('text-success');
+            }
+        });
+
+        // Event listeners for real-time checks
+        document.getElementById('username').addEventListener('input', function() {
+            checkAvailability('username', this.value, 'username-feedback');
+        });
+
+        document.getElementById('email').addEventListener('input', function() {
+            checkAvailability('email', this.value, 'email-feedback');
+        });
+    </script>
+
+</body>
+</html>

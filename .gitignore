@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+
+# Environments
+venv/
+.venv/
+
+# SQLite DB
+*.db
+
+# VS Code settings
+.vscode/
+
+# Credentials or sensitive configs
+.env
