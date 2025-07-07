@@ -52,19 +52,20 @@ Secure-OTP-Auth-System/
 
 ### 1. Clone the repository
 
-```bash
+
 git clone https://github.com/Hammmii/Secure-OTP-Auth-System.git
 cd Secure-OTP-Auth-System
 
-2. Create & activate a virtual environment
+### 2. Create & activate a virtual environment
 python -m venv venv
 source venv/bin/activate   # On Windows: venv\Scripts\activate
 
-3. Install dependencies
+### 3. Install dependencies
 
 pip install -r requirements.txt
 
-4. Configure SMTP Email Settings
+### 4. Configure SMTP Email Settings
+
 Create a .env file in the root directory:
 EMAIL_USER=your_email@gmail.com
 EMAIL_PASS=your_app_password   # Use Gmail App Password (not your Gmail password)
@@ -73,7 +74,7 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-🚀 Usage
+## 🚀 Usage
 
 Register a new user:
 	•	Visit /register and create a new account
@@ -86,7 +87,8 @@ Login:
 
 ⸻
 
-🔒 Security Features
+## 🔒 Security Features
+
 	•	Hashed passwords with bcrypt
 	•	OTP expires in 5 minutes
 	•	Rate limiting on login & OTP requests
@@ -95,7 +97,7 @@ Login:
 
 ⸻
 
-🧪 Testing Scenarios
+## 🧪 Testing Scenarios
 	•	Invalid password
 	•	Expired OTP
 	•	Multiple login attempts (rate limiting)
@@ -104,17 +106,17 @@ Login:
 
 ⸻
 
-🧾 License
+## 🧾 License
 
 This project is open-source and free to use under the MIT License.
 
 ⸻
 
-🙋 Contact
+## 🙋 Contact
 
-Hammad Sikandar
-📧 hammadsikandar8191@gmail.com
-📱 0305-7882280
+## Hammad Sikandar
+## 📧 hammadsikandar8191@gmail.com
+## 📱 0305-7882280
 
 ⸻
 
